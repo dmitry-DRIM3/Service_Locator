@@ -1,6 +1,7 @@
 # Проект "Service Locator Example" 
 
 В этом проекте реализован паттерн **Service Locator**, основанный на механике популярной игры "Subway Surfers".
+
 Прежде чем рассмотреть применение хотелось бы затронуть слова известного разработчика "Martin Pauler" о паттерне.
 
 ## Martin Pauler о паттерне Service Locator
