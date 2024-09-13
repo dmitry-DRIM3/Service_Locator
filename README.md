@@ -1,4 +1,4 @@
-# Проект "Subway Surfers" 
+# Проект "Service Locator Example" 
 
 В этом проекте реализован паттерн **Service Locator**, основанный на механике популярной игры "Subway Surfers". 
 
