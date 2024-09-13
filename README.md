@@ -52,7 +52,7 @@ private void ReloadRoad()
 ## Скрипт PlayerMovementController.cs
 В скрипте PlayerMovementController необходимо знать, какие клавиши нажаты.
 ```csharp
-//В этом методе реализована функция для горизонтального движения игрока:
+//В этом примере реализованы методы для прыжка и горизонтального движения игрока :
 private void MoveHorizontally()
 {
     Vector3 position = transform.position;
@@ -61,11 +61,11 @@ private void MoveHorizontally()
     transform.position = position;
 
     float step;
-    if (_inputController.GetMoveRightButtonDown())
+    if (_inputController.MoveRightButtonDown)
     {
         step = _stepSizeHorizontal;
     }
-    else if (_inputController.GetMoveLeftButtonDown())
+    else if (_inputController.MoveLeftButtonDown)
     {
         step = -_stepSizeHorizontal;
     }
@@ -77,29 +77,43 @@ private void MoveHorizontally()
     _positionHorizontal.x += step;
     _positionHorizontal.x = Mathf.Clamp(_positionHorizontal.x, _minX, _maxX);       
 }
+
+private void Jump()
+{     
+    if (_inputController.JumpButtonDown && _isGrounded)
+    {
+        _inputController.ResetJumpRequest();
+        _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+    }   
+}
 ```
 Считывание нажатий клавиш было перенесено в InputController, так как текущий скрипт отвечает за другую ответственность и не должен заниматься контролем ввода пользователя.
 ## Скрипт InputController.cs
 ```csharp
-public class InputController : MonoBehaviour, IInputService
+public class InputController : MonoBehaviour, IService
 {
+    public bool JumpButtonDown => _jumpButtonDown;
+    public bool MoveLeftButtonDown => _moveLeftButtonDown;
+    public bool MoveRightButtonDown => _moveRightButtonDown;
+
     [SerializeField] private KeyCode _jumpKey;
     [SerializeField] private KeyCode _leftKey;
     [SerializeField] private KeyCode _rightKey;
 
-    public bool GetJumpButtonDown()
+    private bool _jumpButtonDown;
+    private bool _moveLeftButtonDown;
+    private bool _moveRightButtonDown;
+
+    public void ResetJumpRequest()
     {
-        return Input.GetKeyDown(_jumpKey);
+        _jumpButtonDown = false;
     }
 
-    public bool GetMoveLeftButtonDown()
+    private void Update()
     {
-        return Input.GetKeyDown(_leftKey);
-    }
-
-    public bool GetMoveRightButtonDown()
-    {
-        return Input.GetKeyDown(_rightKey);
+        _jumpButtonDown = !_jumpButtonDown ? Input.GetKeyDown(_jumpKey) : true;
+        _moveLeftButtonDown = Input.GetKeyDown(_leftKey);
+        _moveRightButtonDown =  Input.GetKeyDown(_rightKey);
     }
 }
 //Использование InputController позволяет более четко разделить ответственность и улучшить читаемость кода.
