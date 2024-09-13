@@ -5,12 +5,12 @@ public class ServiceLocator
 {
     public static Dictionary<Type, object> _services = new Dictionary<Type, object>();
 
-    public static void RegisterService<T>(T service)
+    public static void RegisterService<T>(T service) where T : IService
     {
         _services.Add(typeof(T), service);     
     }
 
-    public static T GetService<T>()
+    public static T GetService<T>() where T: IService
     {
         var key = typeof(T);
 

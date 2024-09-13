@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovementController : MonoBehaviour, IPlayerPositionProvider
+public class PlayerMovementController : MonoBehaviour, IService
 {
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
@@ -54,11 +54,11 @@ public class PlayerMovementController : MonoBehaviour, IPlayerPositionProvider
         transform.position = position;
 
         float step;
-        if (_inputController.GetMoveRightButtonDown())
+        if (_inputController.MoveRightButtonDown)
         {
             step = _stepSizeHorizontal;
         }
-        else if (_inputController.GetMoveLeftButtonDown())
+        else if (_inputController.MoveLeftButtonDown)
         {
             step = -_stepSizeHorizontal;
         }
@@ -78,9 +78,10 @@ public class PlayerMovementController : MonoBehaviour, IPlayerPositionProvider
     }
 
     private void Jump()
-    {
-        if (_inputController.GetJumpButtonDown() && _isGrounded)
+    {     
+        if (_inputController.JumpButtonDown && _isGrounded)
         {
+            _inputController.ResetJumpRequest();
             _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
         }   
     }

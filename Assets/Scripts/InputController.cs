@@ -2,24 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputController : MonoBehaviour, IInputService
+public class InputController : MonoBehaviour, IService
 {
+    public bool JumpButtonDown => _jumpButtonDown;
+    public bool MoveLeftButtonDown => _moveLeftButtonDown;
+    public bool MoveRightButtonDown => _moveRightButtonDown;
+
     [SerializeField] private KeyCode _jumpKey;
     [SerializeField] private KeyCode _leftKey;
     [SerializeField] private KeyCode _rightKey;
 
-    public bool GetJumpButtonDown()
+    private bool _jumpButtonDown;
+    private bool _moveLeftButtonDown;
+    private bool _moveRightButtonDown;
+
+    public void ResetJumpRequest()
     {
-        return Input.GetKeyDown(_jumpKey);
+        _jumpButtonDown = false;
     }
 
-    public bool GetMoveLeftButtonDown()
+    private void Update()
     {
-        return Input.GetKeyDown(_leftKey);
-    }
-
-    public bool GetMoveRightButtonDown()
-    {
-        return Input.GetKeyDown(_rightKey);
+        _jumpButtonDown = !_jumpButtonDown ? Input.GetKeyDown(_jumpKey) : true;
+        _moveLeftButtonDown = Input.GetKeyDown(_leftKey);
+        _moveRightButtonDown =  Input.GetKeyDown(_rightKey);
     }
 }
