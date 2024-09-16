@@ -34,9 +34,12 @@
 ```csharp
 private void ReloadRoad()
 {
+    //Можно выйти за пределы и столкнуться проблеммами координат лучше использовать метод "Прокрутка"( Создание иллюзии бесконечности можно достичь с помощью механизмов прокрутки,
+    //когда объекты или фон двигаются в пространстве, в то время как игрок остается на месте)
+
     GameObject road = _roads.Peek();
     Vector3 playerPosition = _playerMovementController.GetPlayerPosition();
-
+    
     if (Vector3.Distance(playerPosition, road.transform.position) > _lengthRoad)
     {
         road = _roads.Dequeue();
@@ -96,6 +99,7 @@ public class InputController : MonoBehaviour, IService
     public bool MoveLeftButtonDown => _moveLeftButtonDown;
     public bool MoveRightButtonDown => _moveRightButtonDown;
 
+    //Лучше использовать new input system место стандарных KeyCode
     [SerializeField] private KeyCode _jumpKey;
     [SerializeField] private KeyCode _leftKey;
     [SerializeField] private KeyCode _rightKey;
